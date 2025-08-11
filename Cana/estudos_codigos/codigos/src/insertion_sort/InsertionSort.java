@@ -15,6 +15,10 @@ public class InsertionSort {
         System.out.println("Lista original: ");
         imprimeLista(lista);
 
+        System.out.println("Lista ordenada com Insertion Sort: ");
+        insertionSort(lista);
+        imprimeLista(lista);
+
     }
 
     public static void imprimeLista(int[] lista) {
@@ -29,15 +33,11 @@ public class InsertionSort {
             int currentValue = lista[i];
             int j = i - 1;
 
-            while (j != 0 && lista[j] > currentValue) {
-                {
-                    lista[j + 1] = lista[j];
-                    j--;
-                }
-
-                lista[j - 1] = currentValue;
-
+            while (j >= 0 && lista[j] > currentValue) {
+                lista[j + 1] = lista[j];
+                j--;
             }
+            lista[j + 1] = currentValue;
         }
 
     }
