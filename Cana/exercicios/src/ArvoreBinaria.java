@@ -15,7 +15,7 @@ class Node {
 class ArvoreBinaria {
     Node raiz;
     List<Integer> elementos = new ArrayList<>();
-    String metodoOrdenacao = "insertion";
+    String metodoOrdenacao;
     long tempoTotalOrdenacao = 0;
 
     // Construção da árvore
@@ -160,21 +160,49 @@ class ArvoreBinaria {
         }
     }
 
-    // Impressão visual da árvore
+    // Impressão da árvore em pé (raiz em cima, filhos embaixo)
     public void imprimirArvore(Node raiz) {
-        imprimirArvore(raiz, 0);
+        int altura = altura(raiz);
+        int largura = (int) Math.pow(2, altura) * 2;
+        List<Node> nivelAtual = new ArrayList<>();
+        nivelAtual.add(raiz);
+
+        for (int i = 1; i <= altura; i++) {
+            int espacos = largura / (int) Math.pow(2, i);
+            List<Node> proximoNivel = new ArrayList<>();
+
+            // Espaços antes do primeiro nó
+            imprimirEspacos(espacos / 2);
+
+            for (Node no : nivelAtual) {
+                if (no != null) {
+                    System.out.print(no.valor);
+                    proximoNivel.add(no.esquerda);
+                    proximoNivel.add(no.direita);
+                } else {
+                    System.out.print(" ");
+                    proximoNivel.add(null);
+                    proximoNivel.add(null);
+                }
+                imprimirEspacos(espacos);
+            }
+            System.out.println();
+            nivelAtual = proximoNivel;
+        }
     }
 
-    private void imprimirArvore(Node raiz, int nivel) {
-        if (raiz == null)
-            return;
-
-        imprimirArvore(raiz.direita, nivel + 1);
-
-        for (int i = 0; i < nivel; i++)
-            System.out.print("    ");
-        System.out.println(raiz.valor);
-
-        imprimirArvore(raiz.esquerda, nivel + 1);
+    // Calcula a altura da árvore
+    private int altura(Node no) {
+        if (no == null)
+            return 0;
+        return 1 + Math.max(altura(no.esquerda), altura(no.direita));
     }
+
+    // Imprime uma quantidade de espaços
+    private void imprimirEspacos(int qtd) {
+        for (int i = 0; i < qtd; i++) {
+            System.out.print(" ");
+        }
+    }
+
 }

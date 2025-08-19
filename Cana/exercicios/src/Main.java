@@ -50,7 +50,7 @@ public class Main {
         }
 
         // Árvore ordenada visualmente
-        arvore.construirArvore(arvore.elementos, "nivel"); // reconstrói a árvore a partir da lista ordenada
+        arvore.construirArvore(arvore.elementos, modoStr); // reconstrói a árvore a partir da lista ordenada
         System.out.println("\n\nÁrvore ordenada (visual):");
         arvore.imprimirArvore(arvore.raiz);
 
