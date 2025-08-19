@@ -1,91 +1,61 @@
-import java.util.Scanner;
+import java.util.*;
 
-// Classe do nó da árvore
-class Node {
-    int valor;
-    Node esquerda, direita;
-
-    public Node(int valor) {
-        this.valor = valor;
-        esquerda = direita = null;
-    }
-}
-
-// Classe da árvore binária
-class ArvoreBinaria {
-    Node raiz;
-
-    // Método para inserir um novo valor
-    public void inserir(int valor) {
-        raiz = inserirRec(raiz, valor);
-    }
-
-    // Inserção recursiva
-    private Node inserirRec(Node raiz, int valor) {
-        if (raiz == null) {
-            raiz = new Node(valor);
-            return raiz;
-        }
-
-        if (valor < raiz.valor) {
-            raiz.esquerda = inserirRec(raiz.esquerda, valor);
-        } else if (valor > raiz.valor) {
-            raiz.direita = inserirRec(raiz.direita, valor);
-        }
-
-        return raiz;
-    }
-
-    // Percurso em ordem (in-order)
-    public void emOrdem(Node raiz) {
-        if (raiz != null) {
-            emOrdem(raiz.esquerda);
-            System.out.print(raiz.valor + " ");
-            emOrdem(raiz.direita);
-        }
-    }
-
-    public void preOrdem(Node raiz) {
-        if (raiz != null) {
-            System.out.print(raiz.valor + " ");
-            preOrdem(raiz.esquerda);
-            preOrdem(raiz.direita);
-        }
-    }
-
-    public void posOrdem(Node raiz) {
-        if (raiz != null) {
-            posOrdem(raiz.esquerda);
-            posOrdem(raiz.direita);
-            System.out.print(raiz.valor + " ");
-        }
-    }
-
-}
-
-// Classe principal
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArvoreBinaria arvore = new ArvoreBinaria();
 
+        // Escolha do modo de construção
+        System.out.println("Escolha a forma de construir a árvore:");
+        System.out.println("1 - Pré-ordem");
+        System.out.println("2 - Pós-ordem");
+        System.out.println("3 - Por nível");
+        int modo = sc.nextInt();
+        String modoStr = modo == 1 ? "preordem" : modo == 2 ? "posordem" : "nivel";
+
+        // Entrada de elementos
         System.out.println("Digite quantos elementos deseja inserir: ");
         int n = sc.nextInt();
-
+        List<Integer> lista = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             System.out.print("Digite o valor " + (i + 1) + ": ");
-            int valor = sc.nextInt();
-            arvore.inserir(valor);
+            lista.add(sc.nextInt());
         }
 
-        System.out.println("\nElementos em ordem (in-order):");
-        arvore.emOrdem(arvore.raiz);
+        // Construção da árvore
+        arvore.construirArvore(lista, modoStr);
 
-        System.out.println("\n\nElementos em pré-ordem:");
-        arvore.preOrdem(arvore.raiz);
+        // Escolha do método de ordenação
+        System.out.println("Escolha o método de ordenação:");
+        System.out.println("1 - Insertion Sort");
+        System.out.println("2 - Selection Sort");
+        int metodo = sc.nextInt();
+        arvore.setMetodoOrdenacao(metodo == 1 ? "insertion" : "selection");
 
-        System.out.println("\n\nElementos em pós-ordem:");
-        arvore.posOrdem(arvore.raiz);
+        // Ordenação e tempo
+        arvore.ordenarElementos();
+
+        // Árvore na ordem escolhida
+        System.out.println("\nÁrvore na ordem escolhida:");
+        switch (modoStr) {
+            case "preordem":
+                arvore.preOrdem(arvore.raiz);
+                break;
+            case "posordem":
+                arvore.posOrdem(arvore.raiz);
+                break;
+            case "nivel":
+                arvore.nivel(arvore.raiz);
+                break;
+        }
+
+        // Árvore ordenada visualmente
+        arvore.construirArvore(arvore.elementos, "nivel"); // reconstrói a árvore a partir da lista ordenada
+        System.out.println("\n\nÁrvore ordenada (visual):");
+        arvore.imprimirArvore(arvore.raiz);
+
+        // Tempo da ordenação
+        arvore.mostrarTempo();
 
         sc.close();
     }
