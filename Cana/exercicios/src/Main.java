@@ -5,14 +5,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         ArvoreBinaria arvore = new ArvoreBinaria();
 
-        // Escolha do modo de construção
-        System.out.println("Escolha a forma de construir a árvore:");
-        System.out.println("1 - Pré-ordem");
-        System.out.println("2 - Pós-ordem");
-        System.out.println("3 - Por nível");
-        int modo = sc.nextInt();
-        String modoStr = modo == 1 ? "preordem" : modo == 2 ? "posordem" : "nivel";
-
         // Entrada de elementos sem repetição
         System.out.println("Digite quantos elementos deseja inserir: ");
         int n = sc.nextInt();
@@ -31,8 +23,8 @@ public class Main {
             }
         }
 
-        // Construção da árvore
-        arvore.construirArvore(lista, modoStr);
+        // Construção da BST balanceada
+        arvore.construirBST(lista);
 
         // Escolha do método de ordenação
         System.out.println("Escolha o método de ordenação:");
@@ -44,25 +36,11 @@ public class Main {
         // Ordenação e tempo
         arvore.ordenarElementos();
 
-        // Árvore na ordem escolhida
-        System.out.println("\nÁrvore:");
-        switch (modoStr) {
-            case "preordem":
-                arvore.preOrdem(arvore.raiz);
-                break;
-            case "posordem":
-                arvore.posOrdem(arvore.raiz);
-                break;
-            case "nivel":
-                arvore.nivel(arvore.raiz);
-                break;
-        }
-
+        // Impressão da árvore como vetor
         arvore.imprimirComoVetor();
 
-        // Árvore ordenada visualmente
-        arvore.construirArvore(arvore.elementos, modoStr); // reconstrói a árvore a partir da lista ordenada
-        System.out.println("\n\nÁrvore ordenada (visual):");
+        // Impressão da árvore visualmente (horizontal)
+        System.out.println("\nÁrvore visual (BST balanceada):");
         arvore.imprimirArvore(arvore.raiz);
 
         // Tempo da ordenação
