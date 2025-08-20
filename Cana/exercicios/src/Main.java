@@ -13,13 +13,22 @@ public class Main {
         int modo = sc.nextInt();
         String modoStr = modo == 1 ? "preordem" : modo == 2 ? "posordem" : "nivel";
 
-        // Entrada de elementos
+        // Entrada de elementos sem repetição
         System.out.println("Digite quantos elementos deseja inserir: ");
         int n = sc.nextInt();
+        Set<Integer> conjunto = new HashSet<>();
         List<Integer> lista = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
+
+        for (int i = 0; i < n;) {
             System.out.print("Digite o valor " + (i + 1) + ": ");
-            lista.add(sc.nextInt());
+            int valor = sc.nextInt();
+            if (conjunto.contains(valor)) {
+                System.out.println("Valor repetido! Digite outro número.");
+            } else {
+                conjunto.add(valor);
+                lista.add(valor);
+                i++; // só incrementa se o valor for válido
+            }
         }
 
         // Construção da árvore
@@ -36,7 +45,7 @@ public class Main {
         arvore.ordenarElementos();
 
         // Árvore na ordem escolhida
-        System.out.println("\nÁrvore na ordem escolhida:");
+        System.out.println("\nÁrvore:");
         switch (modoStr) {
             case "preordem":
                 arvore.preOrdem(arvore.raiz);
@@ -48,6 +57,8 @@ public class Main {
                 arvore.nivel(arvore.raiz);
                 break;
         }
+
+        arvore.imprimirComoVetor();
 
         // Árvore ordenada visualmente
         arvore.construirArvore(arvore.elementos, modoStr); // reconstrói a árvore a partir da lista ordenada

@@ -47,32 +47,25 @@ class ArvoreBinaria {
     private Node construirPosOrdem(List<Integer> lista, int inicio, int fim) {
         if (inicio > fim)
             return null;
-        Node no = new Node(lista.get(fim));
-        int meio = (inicio + fim - 1) / 2;
-        no.esquerda = construirPosOrdem(lista, inicio, meio);
-        no.direita = construirPosOrdem(lista, meio + 1, fim - 1);
+        int meio = (inicio + fim) / 2; // raiz será o elemento do meio
+        Node no = new Node(lista.get(meio));
+        no.esquerda = construirPosOrdem(lista, inicio, meio - 1);
+        no.direita = construirPosOrdem(lista, meio + 1, fim);
         return no;
     }
 
     private Node construirPorNivel(List<Integer> lista) {
-        if (lista.isEmpty())
+        return construirBalanceada(lista, 0, lista.size() - 1);
+    }
+
+    private Node construirBalanceada(List<Integer> lista, int inicio, int fim) {
+        if (inicio > fim)
             return null;
-        Node raiz = new Node(lista.get(0));
-        Queue<Node> fila = new LinkedList<>();
-        fila.add(raiz);
-        int i = 1;
-        while (i < lista.size()) {
-            Node atual = fila.poll();
-            if (i < lista.size()) {
-                atual.esquerda = new Node(lista.get(i++));
-                fila.add(atual.esquerda);
-            }
-            if (i < lista.size()) {
-                atual.direita = new Node(lista.get(i++));
-                fila.add(atual.direita);
-            }
-        }
-        return raiz;
+        int meio = (inicio + fim) / 2;
+        Node no = new Node(lista.get(meio));
+        no.esquerda = construirBalanceada(lista, inicio, meio - 1);
+        no.direita = construirBalanceada(lista, meio + 1, fim);
+        return no;
     }
 
     public void setMetodoOrdenacao(String metodo) {
@@ -160,49 +153,52 @@ class ArvoreBinaria {
         }
     }
 
-    // Impressão da árvore em pé (raiz em cima, filhos embaixo)
-    public void imprimirArvore(Node raiz) {
-        int altura = altura(raiz);
-        int largura = (int) Math.pow(2, altura) * 2;
-        List<Node> nivelAtual = new ArrayList<>();
-        nivelAtual.add(raiz);
-
-        for (int i = 1; i <= altura; i++) {
-            int espacos = largura / (int) Math.pow(2, i);
-            List<Node> proximoNivel = new ArrayList<>();
-
-            // Espaços antes do primeiro nó
-            imprimirEspacos(espacos / 2);
-
-            for (Node no : nivelAtual) {
-                if (no != null) {
-                    System.out.print(no.valor);
-                    proximoNivel.add(no.esquerda);
-                    proximoNivel.add(no.direita);
-                } else {
-                    System.out.print(" ");
-                    proximoNivel.add(null);
-                    proximoNivel.add(null);
-                }
-                imprimirEspacos(espacos);
-            }
-            System.out.println();
-            nivelAtual = proximoNivel;
+    // Impressão simples da árvore como vetor (por nível)
+    public void imprimirArvore() {
+        if (raiz == null) {
+            System.out.println("Árvore vazia!");
+            return;
         }
+
+        Queue<Node> fila = new LinkedList<>();
+        fila.add(raiz);
+        List<Integer> resultado = new ArrayList<>();
+
+        while (!fila.isEmpty()) {
+            Node atual = fila.poll();
+            resultado.add(atual.valor);
+
+            if (atual.esquerda != null)
+                fila.add(atual.esquerda);
+            if (atual.direita != null)
+                fila.add(atual.direita);
+        }
+
+        System.out.println("Árvore como vetor (por nível): " + resultado);
     }
 
-    // Calcula a altura da árvore
-    private int altura(Node no) {
-        if (no == null)
-            return 0;
-        return 1 + Math.max(altura(no.esquerda), altura(no.direita));
-    }
-
-    // Imprime uma quantidade de espaços
-    private void imprimirEspacos(int qtd) {
-        for (int i = 0; i < qtd; i++) {
-            System.out.print(" ");
+    // Impressão da árvore como vetor (por nível)
+    public void imprimirComoVetor() {
+        if (raiz == null) {
+            System.out.println("Árvore vazia!");
+            return;
         }
+
+        List<Integer> resultado = new ArrayList<>();
+        Queue<Node> fila = new LinkedList<>();
+        fila.add(raiz);
+
+        while (!fila.isEmpty()) {
+            Node atual = fila.poll();
+            resultado.add(atual.valor);
+
+            if (atual.esquerda != null)
+                fila.add(atual.esquerda);
+            if (atual.direita != null)
+                fila.add(atual.direita);
+        }
+
+        System.out.println("\n\nÁrvore como vetor: " + resultado);
     }
 
 }
