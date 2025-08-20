@@ -26,12 +26,38 @@ class ArvoreBinaria {
     }
 
     private Node construirBSTRec(List<Integer> lista, int inicio, int fim) {
-        if (inicio > fim) return null;
+        if (inicio > fim)
+            return null;
         int meio = (inicio + fim) / 2;
         Node no = new Node(lista.get(meio));
         no.esquerda = construirBSTRec(lista, inicio, meio - 1);
         no.direita = construirBSTRec(lista, meio + 1, fim);
         return no;
+    }
+
+    // Travessias clássicas
+    public void emOrdem(Node raiz) {
+        if (raiz != null) {
+            emOrdem(raiz.esquerda);
+            System.out.print(raiz.valor + " ");
+            emOrdem(raiz.direita);
+        }
+    }
+
+    public void preOrdem(Node raiz) {
+        if (raiz != null) {
+            System.out.print(raiz.valor + " ");
+            preOrdem(raiz.esquerda);
+            preOrdem(raiz.direita);
+        }
+    }
+
+    public void posOrdem(Node raiz) {
+        if (raiz != null) {
+            posOrdem(raiz.esquerda);
+            posOrdem(raiz.direita);
+            System.out.print(raiz.valor + " ");
+        }
     }
 
     // Configura o método de ordenação
@@ -88,7 +114,8 @@ class ArvoreBinaria {
     }
 
     private void imprimirArvoreVisual(Node node, int nivel) {
-        if (node == null) return;
+        if (node == null)
+            return;
 
         imprimirArvoreVisual(node.direita, nivel + 1);
         for (int i = 0; i < nivel; i++)
@@ -111,8 +138,10 @@ class ArvoreBinaria {
         while (!fila.isEmpty()) {
             Node atual = fila.poll();
             resultado.add(atual.valor);
-            if (atual.esquerda != null) fila.add(atual.esquerda);
-            if (atual.direita != null) fila.add(atual.direita);
+            if (atual.esquerda != null)
+                fila.add(atual.esquerda);
+            if (atual.direita != null)
+                fila.add(atual.direita);
         }
 
         System.out.println("\nÁrvore como vetor: " + resultado);

@@ -19,7 +19,7 @@ public class Main {
             } else {
                 conjunto.add(valor);
                 lista.add(valor);
-                i++; // só incrementa se o valor for válido
+                i++;
             }
         }
 
@@ -39,6 +39,29 @@ public class Main {
         // Impressão da árvore como vetor
         arvore.imprimirComoVetor();
 
+        // Escolha do tipo de travessia
+        System.out.println("\nEscolha o tipo de travessia da árvore:");
+        System.out.println("1 - Pré-ordem");
+        System.out.println("2 - Em-ordem");
+        System.out.println("3 - Pós-ordem");
+        int escolha = sc.nextInt();
+
+        System.out.println("\nTravessia escolhida:");
+        switch (escolha) {
+            case 1:
+                arvore.preOrdem(arvore.raiz);
+                break;
+            case 2:
+                arvore.emOrdem(arvore.raiz);
+                break;
+            case 3:
+                arvore.posOrdem(arvore.raiz);
+                break;
+            default:
+                System.out.println("Opção inválida!");
+        }
+        System.out.println();
+
         // Impressão da árvore visualmente (horizontal)
         System.out.println("\nÁrvore visual (BST balanceada):");
         arvore.imprimirArvore(arvore.raiz);
@@ -49,3 +72,4 @@ public class Main {
         sc.close();
     }
 }
+// 9,5,2,4,6,1,12,7
