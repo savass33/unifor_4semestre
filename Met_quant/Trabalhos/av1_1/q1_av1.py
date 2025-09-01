@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('nba_stats.csv', on_bad_lines='skip')
+df = pd.read_csv('./av1_1/nba_stats.csv', on_bad_lines='skip')
 
 freq_name = df["name"].value_counts()
 
