@@ -6,7 +6,7 @@ CREATE TABLE ESPECIE(
 );
 
 CREATE TABLE ANIMAL (
-	id int PRIMARY KEY,
+	id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
     especie int, # ID da especie
 	bioma VARCHAR(30),
     nome VARCHAR(30),
@@ -23,8 +23,10 @@ CREATE TABLE HABITATS (
     ultima_manutencao DATETIME
 );
 
+drop table funcionario;
+
 CREATE TABLE FUNCIONARIO (
-	id INT PRIMARY KEY,
+	id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	nome VARCHAR(30),
 	cargo VARCHAR(20),
     idade INT,
@@ -44,8 +46,6 @@ CREATE TABLE REG_MEDICOS (
     observacoes VARCHAR(100)
 );
 
-
-
 -- Inserindo dados na tabela ESPECIE
 INSERT INTO ESPECIE (id, nome_comum, nome_cientifico, familia) VALUES
 (1, 'Leão', 'Panthera leo', 'Felidae'),
@@ -62,21 +62,21 @@ INSERT INTO HABITATS (id, nome, bioma, tamanho, cap_max, ultima_manutencao) VALU
 (4, 'Habitat Gelado', 'Antártida', 800.00, 20, '2025-08-01 14:00:00');
 
 -- Inserindo dados na tabela FUNCIONARIO
-INSERT INTO FUNCIONARIO (id, nome, cargo, idade, sexo, telefone, estado) VALUES
-(1, 'João Silva', 'Tratador', 35, 'H', '(85) 99999-1234', 'Ativo'),
-(2, 'Maria Oliveira', 'Veterinária', 42, 'M', '(85) 98888-5678', 'Ativo'),
-(3, 'Carlos Pereira', 'Gerente', 50, 'H', '(85) 97777-4321', 'Ativo'),
-(4, 'Ana Souza', 'Bióloga', 28, 'M', '(85) 96666-8765', 'Ativo'),
-(5, 'Pedro Costa', 'Veterinário', 55, 'H', '(85) 95555-1122', 'Inativo');
+INSERT INTO FUNCIONARIO (nome, cargo, idade, sexo, telefone, estado) VALUES
+('João Silva', 'Tratador', 35, 'H', '(85) 99999-1234', 'Ativo'),
+('Maria Oliveira', 'Veterinária', 42, 'M', '(85) 98888-5678', 'Ativo'),
+('Carlos Pereira', 'Gerente', 50, 'H', '(85) 97777-4321', 'Ativo'),
+('Ana Souza', 'Bióloga', 28, 'M', '(85) 96666-8765', 'Ativo'),
+('Pedro Costa', 'Veterinário', 55, 'H', '(85) 95555-1122', 'Inativo');
 
 -- Inserindo dados na tabela ANIMAL
-INSERT INTO ANIMAL (id, especie, bioma, nome, sexo, data_nasc) VALUES
-(1, 1, 'Savana', 'Simba', 'H', '2020-08-28 10:00:00'),
-(2, 1, 'Savana', 'Nala', 'M', '2018-07-15 14:30:00'),
-(3, 2, 'Savana', 'Dumbo', 'H', '2010-01-20 05:00:00'),
-(4, 3, 'Savana', 'Melman', 'H', '2015-05-10 18:00:00'),
-(5, 4, 'Antártida', 'Pingu', 'H', '2022-11-30 22:15:00'),
-(6, 5, 'Floresta Tropical', 'Rajah', 'H', '2017-03-05 12:00:00');
+INSERT INTO ANIMAL (especie, bioma, nome, sexo, data_nasc) VALUES
+(1, 'Savana', 'Simba', 'H', '2020-08-28 10:00:00'),
+(1, 'Savana', 'Nala', 'M', '2018-07-15 14:30:00'),
+(2, 'Savana', 'Dumbo', 'H', '2010-01-20 05:00:00'),
+(3, 'Savana', 'Melman', 'H', '2015-05-10 18:00:00'),
+(4, 'Antártida', 'Pingu', 'H', '2022-11-30 22:15:00'),
+(5, 'Floresta Tropical', 'Rajah', 'H', '2017-03-05 12:00:00');
 
 -- Inserindo dados na tabela REG_MEDICOS
 -- Relaciona os animais com os funcionários (veterinários)
@@ -86,24 +86,15 @@ INSERT INTO REG_MEDICOS (id, animal, veterinario, data_registro, tipo_registro, 
 (3, 5, 2, '2025-08-05 11:45:00', 'Vacinação', 'N/A', 'Vacina polivalente V10', 'Sem reações adversas à vacina.'),
 (4, 6, 5, '2024-11-20 09:00:00', 'Consulta', 'Dor na pata dianteira', 'Anti-inflamatório por 7 dias', 'Registro antigo, veterinário agora inativo.');
 
--- Inserindo dados na tabela ANIMAL
-INSERT INTO ANIMAL (id, especie, bioma, nome, sexo, data_nasc) VALUES
-(1, 1, 'Savana', 'Simba', 'H', '2020-08-28 10:00:00'),
-(2, 1, 'Savana', 'Nala', 'M', '2018-07-15 14:30:00'),
-(3, 2, 'Savana', 'Dumbo', 'H', '2010-01-20 05:00:00'),
-(4, 3, 'Savana', 'Melman', 'H', '2015-05-10 18:00:00'),
-(5, 4, 'Antártida', 'Pingu', 'H', '2022-11-30 22:15:00'),
-(6, 5, 'Floresta Tropical', 'Rajah', 'H', '2017-03-05 12:00:00');
-
-# Q1 - Usar o altertable para adicao de uma nova coluna NN
+-- Q1 - Usar o altertable para adicao de uma nova coluna NN
 	ALTER TABLE ANIMAL ADD peso INT NOT NULL;
     select * from animal;
     UPDATE ANIMAL SET peso = 70 WHERE id = 1;
 
-# Q2 - Usar o altertable para retirar a PK de um atributo (sem excluir o atributo) e adicionar uma nova coluna e setar ela como PK
-	ALTER TABLE FUNCIONARIO DROP PRIMARY KEY;
+-- Q2 - Usar o altertable para retirar a PK de um atributo (sem excluir o atributo) e adicionar uma nova coluna e setar ela como PK
+	ALTER TABLE FUNCIONARIO MODIFY COLUMN id INT NOT NULL; -- Tira o auto increment
 	ALTER TABLE FUNCIONARIO ADD CPF VARCHAR(11);
-    UPDATE FUNCIONARIO SET CPF = '12345678915' WHERE id = 5;
-    ALTER TABLE FUNCIONARIO MODIFY CPF VARCHAR(11) NOT NULL;
-    ALTER TABLE FUNCIONARIO ADD PRIMARY KEY (CPF);
+	ALTER TABLE FUNCIONARIO MODIFY COLUMN CPF VARCHAR(11) NOT NULL; -- Transforma a coluna que vai ser pk em not null
+	ALTER TABLE FUNCIONARIO DROP PRIMARY KEY; -- Dropa a pk antiga	
+    ALTER TABLE FUNCIONARIO ADD PRIMARY KEY (CPF); -- Insere a nova pk
     select * from FUNCIONARIO
