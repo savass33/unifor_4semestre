@@ -22,10 +22,10 @@ SET SQL_SAFE_UPDATES = 0;
 SET GLOBAL sql_mode='';
 
 -- Adicionar coluna cpf
-ALTER TABLE FUNCIONARIO ADD COLUMN CPF VARCHAR(11);
+ALTER TABLE FUNCIONARIO ADD COLUMN cpf VARCHAR(11);
 
 -- cpfs temporários com base no id
-UPDATE FUNCIONARIO SET CPF = id;
+UPDATE FUNCIONARIO SET cpf = id;
 
 -- Remove auto da coluna antiga
 ALTER TABLE FUNCIONARIO MODIFY COLUMN id INT NOT NULL;
@@ -34,7 +34,45 @@ ALTER TABLE FUNCIONARIO MODIFY COLUMN id INT NOT NULL;
 ALTER TABLE FUNCIONARIO DROP PRIMARY KEY;
 
 -- seta CPF como NOT NULL e define como a nova PK
-ALTER TABLE FUNCIONARIO MODIFY COLUMN CPF VARCHAR(11) NOT NULL;
-ALTER TABLE FUNCIONARIO ADD PRIMARY KEY (CPF);
+ALTER TABLE FUNCIONARIO MODIFY COLUMN cpf VARCHAR(11) NOT NULL;
+ALTER TABLE FUNCIONARIO ADD PRIMARY KEY (cpf);
 
 SELECT * FROM FUNCIONARIO;
+SHOW CREATE TABLE FUNCIONARIO;
+
+
+-- ------------- Outra forma com FK ------------ ---
+
+drop table RefPriKey;
+SHOW CREATE TABLE RefPriKey;
+SELECT * FROM RefPriKey;
+
+-- Cria uma tabela auxiliar que servirá apenas para armazenar CPFs válidos
+create table RefPriKey(
+    cpf VARCHAR(11) PRIMARY KEY
+);
+
+-- Remove o AUTO_INCREMENT da coluna id de FUNCIONARIO
+ALTER TABLE FUNCIONARIO MODIFY COLUMN id INT NOT NULL;
+
+-- Dropa a chave primária antiga (que estava em id)
+ALTER TABLE FUNCIONARIO DROP PRIMARY KEY;
+
+-- Adiciona a coluna cpf na tabela FUNCIONARIO
+ALTER TABLE FUNCIONARIO ADD COLUMN cpf VARCHAR(11);
+
+-- Cria uma Foreign Key ligando FUNCIONARIO.cpf com RefPriKey.cpf
+-- Isso garante que só pode existir cpf em FUNCIONARIO se ele já existir em RefPriKey
+ALTER TABLE FUNCIONARIO ADD CONSTRAINT fk_funcionario_cpf FOREIGN KEY (cpf) REFERENCES RefPriKey(cpf);
+
+-- Insere CPFs válidos primeiro na tabela de referência (RefPriKey)
+insert into RefPriKey(cpf) values
+('00011122233'),
+('3332221100');
+
+select * from RefPriKey;
+
+-- Agora insere funcionários em FUNCIONARIO, referenciando os CPFs já existentes em RefPriKey
+INSERT INTO FUNCIONARIO (nome, cargo, idade, sexo, telefone, estado, cpf) VALUES
+('Savas', 'Cafetão', 35, 'H', '(85) 99999-1234', 'Ativo', '00011122233'),
+('Wermont', 'Prostituta', 72, 'M', '(85) 98888-5678', 'Inativo', '3332221100');
